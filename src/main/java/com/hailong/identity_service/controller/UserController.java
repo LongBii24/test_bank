@@ -2,8 +2,11 @@ package com.hailong.identity_service.controller;
 
 import com.hailong.identity_service.dto.request.UserCreationRequest;
 import com.hailong.identity_service.dto.request.UserUpdateRequest;
+import com.hailong.identity_service.dto.response.ApiResponse;
+import com.hailong.identity_service.dto.response.UserResponse;
 import com.hailong.identity_service.entity.User;
 import com.hailong.identity_service.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +19,10 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    User createUser(@RequestBody UserCreationRequest request){
-        return userService.createRequest(request);
+    ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request){
+        ApiResponse<User> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(userService.createUser(request));
+        return apiResponse;
     }
 
     @GetMapping
@@ -26,12 +31,12 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-        User getUser(@PathVariable("userId") String userId){
+    UserResponse getUser(@PathVariable("userId") String userId){
         return userService.getUser(userId);
     }
 
     @PutMapping("/{userId}")
-    User updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request){
+    UserResponse updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request){
         return userService.updateUser(userId, request);
     }
 
