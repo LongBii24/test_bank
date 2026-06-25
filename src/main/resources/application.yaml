@@ -16,3 +16,5 @@ spring:
     properties:
       hibernate:
         format_sql: true
+jwt:
+  signerKey: "q8ibtqQsPE8HoWkgRezRmmFpttOb1viAEFeIdoOL3o2e6pbK1AUXaMct+/7tOZ2h4VKmNFutOu5A4S7L9+jKHg=="
