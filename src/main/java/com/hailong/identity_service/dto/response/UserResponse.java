@@ -1,5 +1,7 @@
 package com.hailong.identity_service.dto.response;
 
+import com.hailong.identity_service.entity.Role;
+import jakarta.persistence.ManyToMany;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -16,5 +18,5 @@ public class UserResponse {
     private String firstName;
     private String lastName;
     private LocalDate dob;
-    private Set<String> roles;
+    private Set<Role> roles;
 }

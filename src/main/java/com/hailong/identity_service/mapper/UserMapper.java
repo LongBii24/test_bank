@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 //để su dụng cho service
-@Mapper(componentModel =  "Spring")
+@Mapper(componentModel =  "spring")
 public interface UserMapper {
     User toUser(UserCreationRequest request);
 
