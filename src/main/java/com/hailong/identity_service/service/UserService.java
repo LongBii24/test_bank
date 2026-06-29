@@ -8,6 +8,7 @@ import com.hailong.identity_service.enums.Role;
 import com.hailong.identity_service.exception.AppException;
 import com.hailong.identity_service.exception.ErrorCode;
 import com.hailong.identity_service.mapper.UserMapper;
+import com.hailong.identity_service.repository.RoleRepository;
 import com.hailong.identity_service.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class UserService {
      UserRepository userRepository;
      UserMapper userMapper;
      PasswordEncoder passwordEncoder;
+     RoleRepository roleRepository;
 
     public UserResponse createUser(UserCreationRequest request){
         if (userRepository.existsByUsername(request.getUsername()))
@@ -58,7 +60,8 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    // dùng hasAuthority để lấy đúng role hoặc permission cần thiết trong scope
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public List<UserResponse> getUsers(){
         return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
     }
@@ -69,12 +72,15 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
     }
 
-    @PostAuthorize("retunrObject.username == authentication.name")
+//    @PostAuthorize("retunrObject.username == authentication.name")
     public UserResponse updateUser(String userId, UserUpdateRequest request){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         userMapper.updateUser(user,request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        var roles = roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
 
         return userMapper.toUserResponse(userRepository.save(user));
     }

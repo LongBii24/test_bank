@@ -1,5 +1,6 @@
 package com.hailong.identity_service.dto.request;
 
+import com.hailong.identity_service.validator.DobConstraint;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -16,6 +17,8 @@ public class UserCreationRequest {
     private String password;
     private String firstName;
     private String lastName;
+
+    @DobConstraint(min = 16, message = "INVALID_DOB")
     private LocalDate dob;
 
 

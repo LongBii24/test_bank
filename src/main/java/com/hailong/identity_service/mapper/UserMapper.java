@@ -17,5 +17,7 @@ public interface UserMapper {
 //    cái này dùng để ignore hoặc mapp cái này trùng cái kia
 //    @Mapping(source = "firstName",target = "lastName")
     UserResponse toUserResponse(User user);
+    // khac truong String vơi list nen ignore de khong map
+    @Mapping(target = "roles", ignore = true)
     void updateUser(@MappingTarget User user, UserUpdateRequest request);
 }
