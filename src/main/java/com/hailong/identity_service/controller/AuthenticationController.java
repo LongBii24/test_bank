@@ -3,6 +3,7 @@ package com.hailong.identity_service.controller;
 import com.hailong.identity_service.dto.request.AuthenticationRequest;
 import com.hailong.identity_service.dto.request.IntrospectRequest;
 import com.hailong.identity_service.dto.request.LogoutRequest;
+import com.hailong.identity_service.dto.request.RefreshRequest;
 import com.hailong.identity_service.dto.response.ApiResponse;
 import com.hailong.identity_service.dto.response.AuthenticationResponse;
 import com.hailong.identity_service.dto.response.IntrospectResponse;
@@ -45,6 +46,14 @@ public class AuthenticationController {
     ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException  {
         authenticationService.logout(request);
         return ApiResponse.<Void>builder()
+                .build();
+    }
+
+    @PostMapping("/refresh")
+    ApiResponse<AuthenticationResponse> introspected(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
+        var result = authenticationService.refreshToken(request);
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(result)
                 .build();
     }
 }
